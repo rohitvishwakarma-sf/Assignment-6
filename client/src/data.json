@@ -1,0 +1,47 @@
+[
+    {
+        "firstName": "Rohit",
+        "middleName": "",
+        "lastName": "Vishwakarma",
+        "email": "rohit@gmail.com",
+        "phone": "7000515270",
+        "role": "superadmin",
+        "address": "Jabalpur"
+    },
+    {
+        "firstName": "Steve",
+        "middleName": "",
+        "lastName": "Jobs",
+        "email": "steve@gmail.com",
+        "phone": "7000515271",
+        "role": "superAdmin",
+        "address": "NewYork"
+    },
+    {
+        "firstName": "Satya",
+        "middleName": "",
+        "lastName": "Nadella",
+        "email": "Satya@gmail.com",
+        "phone": "7000515272",
+        "role": "admin",
+        "address": "UK"
+    },
+    {
+        "firstName": "Jeff",
+        "middleName": "S",
+        "lastName": "Bezos",
+        "email": "Jeff@gmail.com",
+        "phone": "7000515273",
+        "role": "subscriber",
+        "address": "Australia"
+    },
+    {
+        "firstName": "Sundar",
+        "middleName": "Ram",
+        "lastName": "Pitchai",
+        "email": "Sundar@gmail.com",
+        "phone": "7000515274",
+        "role": "subscriber",
+        "address": "Delhi"
+    }
+]
