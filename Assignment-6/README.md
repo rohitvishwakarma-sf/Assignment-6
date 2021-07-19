@@ -20,3 +20,5 @@ inside folder server run
 inside folder client run
 
 > npm start
+
+run client on http://localhost:8080/ as it is used in CORS policy in server
