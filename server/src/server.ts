@@ -4,6 +4,18 @@ import cors from "cors";
 import * as fs from "fs";
 import path from "path/posix";
 import { User } from "./User";
+import { dbClient as db } from "./database";
+
+// client.query(query, (err, res) => {
+//   if (err) {
+//     console.error(err);
+//     return;
+//   }
+
+//   console.log("Data fetched");
+//   console.log(res.rows);
+//   client.end();
+// });
 
 var corsOptions = {
   // origin: "http://192.168.29.216:8080",
@@ -15,13 +27,17 @@ const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 
-app.get("/", (req, res) => {
-  const data = fs.readFileSync("../database/data.json", {
-    encoding: "utf8",
+app.get("/", async (req, res) => {
+  // const data = fs.readFileSync("../database/data.json", {
+  //   encoding: "utf8",
+  // });
+  await db.query(`select * from users`, (err, res) => {
+    if (!err) {
+      console.log(res.rows);
+    }
   });
-
-  res.setHeader("Content-Type", "application/json");
-  res.send(data);
+  await res.setHeader("Content-Type", "application/json");
+  // res.send(data);
 });
 
 app.post("/save", (req, res) => {
