@@ -4,8 +4,8 @@
         "middleName": "",
         "lastName": "Vishwakarma",
         "email": "rohit@gmail.com",
-        "phone": "7000515270",
-        "role": "superadmin",
+        "phone": "123456789",
+        "role": "superAdmin",
         "address": "Jabalpur"
     },
     {
@@ -13,7 +13,7 @@
         "middleName": "",
         "lastName": "Jobs",
         "email": "steve@gmail.com",
-        "phone": "7000515271",
+        "phone": "123456789",
         "role": "superAdmin",
         "address": "NewYork"
     },
@@ -22,7 +22,7 @@
         "middleName": "",
         "lastName": "Nadella",
         "email": "Satya@gmail.com",
-        "phone": "7000515272",
+        "phone": "123456789",
         "role": "admin",
         "address": "UK"
     },
@@ -31,7 +31,7 @@
         "middleName": "S",
         "lastName": "Bezos",
         "email": "Jeff@gmail.com",
-        "phone": "7000515273",
+        "phone": "123456789",
         "role": "subscriber",
         "address": "Australia"
     },
@@ -40,7 +40,7 @@
         "middleName": "Ram",
         "lastName": "Pitchai",
         "email": "Sundar@gmail.com",
-        "phone": "7000515274",
+        "phone": "123456789",
         "role": "subscriber",
         "address": "Delhi"
     }
