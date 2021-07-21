@@ -27,7 +27,6 @@ class HomePage {
       "refreshbutton"
     )! as HTMLButtonElement;
     this.userCrud = new UserCrud("tablecontainer");
-
     this.loadButton.addEventListener("click", this.loadData);
     this.refreshButton.addEventListener("click", this.refreshData);
     this.refreshButton.style.display = "none";
