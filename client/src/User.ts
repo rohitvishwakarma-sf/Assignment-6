@@ -13,7 +13,6 @@ export class User {
   phone!: string;
   address!: string;
   role_key!: Role;
-
   constructor(
     firstName: string,
     middleName: string = "",

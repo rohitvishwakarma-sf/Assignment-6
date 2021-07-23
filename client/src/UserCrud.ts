@@ -25,8 +25,6 @@ export class UserCrud implements ICrud<User> {
         return res.json();
       })
       .then((data: string) => {
-        console.log(data);
-
         for (const user of data) {
           const newUser = plainToClass(User, user as Object)!;
           this.users.push(newUser);
@@ -40,7 +38,7 @@ export class UserCrud implements ICrud<User> {
     this.renderTable();
   }
 
-  renderTable() {
+  async renderTable() {
     this.hostEle.innerHTML = "";
     const tableEle = document.createElement("table");
     tableEle.className = "styled-table";
@@ -57,20 +55,28 @@ export class UserCrud implements ICrud<User> {
                             <th>Phone</th>
                             <th>Address</th>
                             <th>Role</th>
+                            <th>Customer Name</th>
                             <th>Actions</th>`;
     this.hostEle.appendChild(tableEle);
     this.tableBody = document.createElement("tbody");
     tableEle.appendChild(this.tableBody);
-    this.users.forEach((value, index) => {
-      this.addRow(value);
-    });
+    // this.users.forEach((value, index) => {
+    //   this.addRow(value);
+    // });
+    for (const user of this.users) {
+      await this.addRow(user);
+    }
     // const addbutton = document.createElement("button");
     // addbutton.id = "addbutton";
     // addbutton.textContent = "Create Data";
     // addbutton.addEventListener("click", this.onCreateData);
     // this.hostEle.appendChild(addbutton);
   }
-  addRow(user: User) {
+  async addRow(user: User) {
+    const customerName = await this.getCustomerName(user.user_id!).then(
+      (data) => data
+    );
+
     const row = document.createElement("tr");
     row.innerHTML = `   <td>${user.user_id}</td>
                         <td>${user.firstname}</td>
@@ -79,7 +85,8 @@ export class UserCrud implements ICrud<User> {
                         <td>${user.email}</td>
                         <td>${user.phone}</td>
                         <td>${user.address}</td>
-                        <td>${user.role_key}</td>`;
+                        <td>${user.role_key}</td>
+                        <td>${customerName}</td>`;
     const actionTd = document.createElement("td");
     row.appendChild(actionTd);
     const editbutton = this.createNewButton("Edit", CC.editbutton, () => {
@@ -103,6 +110,7 @@ export class UserCrud implements ICrud<User> {
 
     this.tableBody!.appendChild(row);
   }
+
   createNewButton(
     text: string,
     className: CC,
@@ -115,6 +123,8 @@ export class UserCrud implements ICrud<User> {
     return button;
   }
   editRow(i: number) {
+    console.log(i);
+
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
     const buttonTd = row.lastChild as HTMLTableDataCellElement;
 
@@ -242,8 +252,6 @@ export class UserCrud implements ICrud<User> {
         body: inputedData,
       });
       if (response.status === 200) {
-        console.log("data changed");
-
         const editedUser = JSON.parse(inputedData) as User;
         user.firstname = editedUser.firstname;
         user.middlename = editedUser.middlename;
@@ -344,5 +352,15 @@ export class UserCrud implements ICrud<User> {
       +user_id
     );
     return JSON.stringify(user);
+  }
+  async getCustomerName(user_id: number) {
+    let customerName: string = "";
+    const response = await fetch(`${myURL}/customername/${user_id}`, {})
+      .then((response) => response.json())
+      .then((data) => {
+        const jsonobj = data as { name: string };
+        customerName = jsonobj.name;
+      });
+    return customerName;
   }
 }

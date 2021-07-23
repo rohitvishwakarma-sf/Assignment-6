@@ -16,9 +16,6 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 app.get("/", async (request, response) => {
-  const data = fs.readFileSync("../database/data.json", {
-    encoding: "utf8",
-  });
   db.connect((err, client, done) => {
     if (err) throw err;
     client.query(`select * from users`, (err, result) => {
@@ -36,7 +33,6 @@ app.get("/", async (request, response) => {
 
 app.patch("/save", (request, response) => {
   const user = request.body as User;
-  console.log(user);
 
   db.connect((err, client, done) => {
     client.query(
@@ -90,6 +86,24 @@ app.put("/", (request, response) => {
           response.status(417).send(err);
         } else {
           response.status(204).send();
+        }
+      }
+    );
+  });
+});
+app.get("/customername/:user_Id", (request, response) => {
+  console.log("customer");
+
+  db.connect((err, client, done) => {
+    client.query(
+      `select name from customers where user_id = '${request.params.user_Id}';`,
+      (err, result) => {
+        if (err) {
+          console.log(err.message);
+          response.status(404).send(err.message);
+        } else {
+          response.setHeader("Content-Type", "application/json");
+          response.status(200).send(JSON.stringify(result.rows[0]));
         }
       }
     );

@@ -70,7 +70,7 @@ button {
   font-size: 1.2em;
   font-family: sans-serif;
   /* min-width: 400px; */
-  width: 50%;
+  width: 25%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .styled-table thead tr {
@@ -82,11 +82,11 @@ button {
   background-color: #3d6d79;
   font-size: 24px;
   font-weight: normal;
-  padding: 12px 55px;
+  padding: 12px 20px;
 }
 .styled-table th,
 .styled-table td {
-  padding: 12px 15px;
+  padding: 12px 5px;
 }
 .styled-table tbody tr {
   border-bottom: 1px solid #dddddd;
