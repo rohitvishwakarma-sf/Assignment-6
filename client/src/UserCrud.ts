@@ -25,6 +25,8 @@ export class UserCrud implements ICrud<User> {
         return res.json();
       })
       .then((data: string) => {
+        console.log(data);
+
         for (const user of data) {
           const newUser = plainToClass(User, user as Object)!;
           this.users.push(newUser);
@@ -46,7 +48,9 @@ export class UserCrud implements ICrud<User> {
     tableEle.appendChild(thead);
     const headtr = document.createElement("tr");
     thead.appendChild(headtr);
-    headtr.innerHTML = `<th>First Name</th>
+    headtr.innerHTML = `
+                            <th>Id</th>
+                            <th>First Name</th>
                             <th>Middle Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
@@ -60,21 +64,22 @@ export class UserCrud implements ICrud<User> {
     this.users.forEach((value, index) => {
       this.addRow(value);
     });
-    const addbutton = document.createElement("button");
-    addbutton.id = "addbutton";
-    addbutton.textContent = "Create Data";
-    addbutton.addEventListener("click", this.onCreateData);
-    this.hostEle.appendChild(addbutton);
+    // const addbutton = document.createElement("button");
+    // addbutton.id = "addbutton";
+    // addbutton.textContent = "Create Data";
+    // addbutton.addEventListener("click", this.onCreateData);
+    // this.hostEle.appendChild(addbutton);
   }
   addRow(user: User) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${user.firstname}</td>
+    row.innerHTML = `   <td>${user.user_id}</td>
+                        <td>${user.firstname}</td>
                         <td>${user.middlename} </td>
                         <td>${user.lastname}</td>
                         <td>${user.email}</td>
                         <td>${user.phone}</td>
                         <td>${user.address}</td>
-                        <td>${user.role}</td>`;
+                        <td>${user.role_key}</td>`;
     const actionTd = document.createElement("td");
     row.appendChild(actionTd);
     const editbutton = this.createNewButton("Edit", CC.editbutton, () => {
@@ -126,83 +131,84 @@ export class UserCrud implements ICrud<User> {
       buttonTd.querySelector(`.${CC.cancelbutton}`) as HTMLButtonElement
     ).style.display = "";
     const user = this.users[i];
-    row.children[0].innerHTML = `<input value=${user.firstname}>`;
-    row.children[1].innerHTML = `<input value=${user.middlename}>`;
-    row.children[2].innerHTML = `<input value=${user.lastname}>`;
-    row.children[3].innerHTML = `<input value=${user.email} disabled>`;
-    row.children[4].innerHTML = `<input value=${user.phone}>`;
+    row.children[0].innerHTML = `<input value=${user.user_id} disabled>`;
+    row.children[1].innerHTML = `<input value=${user.firstname}>`;
+    row.children[2].innerHTML = `<input value=${user.middlename}>`;
+    row.children[3].innerHTML = `<input value=${user.lastname}>`;
+    row.children[4].innerHTML = `<input value=${user.email}>`;
+    row.children[5].innerHTML = `<input value=${user.phone}>`;
     const select = document.createElement("select");
     select.className = "selectrole";
     for (const e in Role) {
       const option = document.createElement("option");
       option.value = e;
       option.textContent = e;
-      if (user.role === e) option.selected = true;
+      if (user.role_key === e) option.selected = true;
       else option.selected = false;
       select.appendChild(option);
     }
-    row.children[5].innerHTML = `<input value=${user.address}>`;
-    row.children[6].firstChild!.replaceWith(select);
+    row.children[6].innerHTML = `<input value=${user.address}>`;
+    row.children[7].firstChild!.replaceWith(select);
   }
-  @autoBind
-  onCreateData(e: Event) {
-    (<HTMLButtonElement>e.target).style.display = "none";
-    const row = document.createElement("tr");
-    row.id = "create-user-row";
-    row.innerHTML = `<td><input></td>
-    <td><input></td>
-    <td><input></td>
-    <td><input></td>
-    <td><input></td>
-    <td><input></td>
-    <td><select class="selectrole">
-      <option value="superadmin">superadmin</option>
-      <option value="admin">admin</option>
-      <option value="subscriber">subscriber</option>
-    </select></td>
-    <td></td>`;
-    const saveNewUserButton = document.createElement("button");
-    saveNewUserButton.textContent = "Save";
-    saveNewUserButton.addEventListener("click", this.saveNewUser);
-    row.lastChild!.appendChild(saveNewUserButton);
-    this.tableBody!.appendChild(row);
-  }
-  @autoBind
-  async saveNewUser() {
-    const row = document.getElementById(
-      "create-user-row"
-    ) as HTMLTableRowElement;
-    const jsonUser = this.getEditedUser(this.tableBody!.childElementCount - 1);
-    const newuser: User = JSON.parse(jsonUser) as User;
-    if (
-      newuser.firstname &&
-      newuser.lastname &&
-      newuser.email &&
-      newuser.phone &&
-      newuser.address &&
-      newuser.role
-    ) {
-      if (!this.users.find((user) => user.email === newuser.email)) {
-        const resonse = await fetch(myURL, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: jsonUser,
-        });
+  // @autoBind
+  // onCreateData(e: Event) {
+  //   (<HTMLButtonElement>e.target).style.display = "none";
+  //   const row = document.createElement("tr");
+  //   row.id = "create-user-row";
+  //   row.innerHTML = `<td><input></td>
+  //   <td><input></td>
+  //   <td><input></td>
+  //   <td><input></td>
+  //   <td><input></td>
+  //   <td><input></td>
+  //   <td><select class="selectrole">
+  //     <option value="superadmin">superadmin</option>
+  //     <option value="admin">admin</option>
+  //     <option value="subscriber">subscriber</option>
+  //   </select></td>
+  //   <td></td>`;
+  //   const saveNewUserButton = document.createElement("button");
+  //   saveNewUserButton.textContent = "Save";
+  //   saveNewUserButton.addEventListener("click", this.saveNewUser);
+  //   row.lastChild!.appendChild(saveNewUserButton);
+  //   this.tableBody!.appendChild(row);
+  // }
+  // @autoBind
+  // async saveNewUser() {
+  //   const row = document.getElementById(
+  //     "create-user-row"
+  //   ) as HTMLTableRowElement;
+  //   const jsonUser = this.getEditedUser(this.tableBody!.childElementCount - 1);
+  //   const newuser: User = JSON.parse(jsonUser) as User;
+  //   if (
+  //     newuser.firstname &&
+  //     newuser.lastname &&
+  //     newuser.email &&
+  //     newuser.phone &&
+  //     newuser.address &&
+  //     newuser.role_key
+  //   ) {
+  //     if (!this.users.find((user) => user.email === newuser.email)) {
+  //       const resonse = await fetch(myURL, {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: jsonUser,
+  //       });
 
-        if (resonse.status === 204) {
-          console.log("data added");
-        }
-      }
-      (
-        document.getElementById("addbutton") as HTMLButtonElement
-      ).style.display = "";
-      this.tableBody!.lastChild!.remove();
-      this.create(newuser);
-      this.addRow(newuser);
-    }
-  }
+  //       if (resonse.status === 204) {
+  //         console.log("data added");
+  //       }
+  //     }
+  //     (
+  //       document.getElementById("addbutton") as HTMLButtonElement
+  //     ).style.display = "";
+  //     this.tableBody!.lastChild!.remove();
+  //     this.create(newuser);
+  //     this.addRow(newuser);
+  //   }
+  // }
   create(user: User) {
     this.users.push(user);
   }
@@ -215,7 +221,7 @@ export class UserCrud implements ICrud<User> {
     const response = await fetch(`${myURL}/delete/${user.email}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "pplication/json",
+        "Content-Type": "aplication/json",
       },
     });
     if (response.status == 200) {
@@ -245,7 +251,7 @@ export class UserCrud implements ICrud<User> {
         user.email = editedUser.email;
         user.phone = editedUser.phone;
         user.address = editedUser.address;
-        user.role = editedUser.role;
+        user.role_key = editedUser.role_key;
       }
     } catch (error) {
       console.log(error);
@@ -274,14 +280,14 @@ export class UserCrud implements ICrud<User> {
     // user.phone = (row.children[4].children[0] as HTMLInputElement).value;
     // user.address = (row.children[5].children[0] as HTMLInputElement).value;
     // user.role = (row.children[6].children[0] as HTMLInputElement).value as Role;
-
-    row.children[0].innerHTML = `${user.firstname}`;
-    row.children[1].innerHTML = `${user.middlename}`;
-    row.children[2].innerHTML = `${user.lastname}`;
-    row.children[3].innerHTML = `${user.email}`;
-    row.children[4].innerHTML = `${user.phone}`;
-    row.children[5].innerHTML = `${user.address}`;
-    row.children[6].innerHTML = `${user.role}`;
+    row.children[0].innerHTML = `${user.user_id}`;
+    row.children[1].innerHTML = `${user.firstname}`;
+    row.children[2].innerHTML = `${user.middlename}`;
+    row.children[3].innerHTML = `${user.lastname}`;
+    row.children[4].innerHTML = `${user.email}`;
+    row.children[5].innerHTML = `${user.phone}`;
+    row.children[6].innerHTML = `${user.address}`;
+    row.children[7].innerHTML = `${user.role_key}`;
   }
   cancel(user: User) {
     const row = this.tableBody!.children[
@@ -300,14 +306,14 @@ export class UserCrud implements ICrud<User> {
     (
       actionTd.querySelector(`.${CC.deletebutton}`) as HTMLButtonElement
     ).style.display = "";
-
-    row.children[0].innerHTML = `${user.firstname}`;
-    row.children[1].innerHTML = `${user.middlename}`;
-    row.children[2].innerHTML = `${user.lastname}`;
-    row.children[3].innerHTML = `${user.email}`;
-    row.children[4].innerHTML = `${user.phone}`;
-    row.children[5].innerHTML = `${user.address}`;
-    row.children[6].innerHTML = `${user.role}`;
+    row.children[0].innerHTML = `${user.user_id}`;
+    row.children[1].innerHTML = `${user.firstname}`;
+    row.children[2].innerHTML = `${user.middlename}`;
+    row.children[3].innerHTML = `${user.lastname}`;
+    row.children[4].innerHTML = `${user.email}`;
+    row.children[5].innerHTML = `${user.phone}`;
+    row.children[6].innerHTML = `${user.address}`;
+    row.children[7].innerHTML = `${user.role_key}`;
   }
 
   refresh() {
@@ -317,13 +323,14 @@ export class UserCrud implements ICrud<User> {
   }
   getEditedUser(i: number): string {
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
-    const firstName = (row.children[0].children[0] as HTMLInputElement).value;
-    const middleName = (row.children[1].children[0] as HTMLInputElement).value;
-    const lastName = (row.children[2].children[0] as HTMLInputElement).value;
-    const email = (row.children[3].children[0] as HTMLInputElement).value;
-    const phone = (row.children[4].children[0] as HTMLInputElement).value;
-    const address = (row.children[5].children[0] as HTMLInputElement).value;
-    const role = (row.children[6].children[0] as HTMLInputElement)
+    const user_id = (row.children[0].children[0] as HTMLInputElement).value;
+    const firstName = (row.children[1].children[0] as HTMLInputElement).value;
+    const middleName = (row.children[2].children[0] as HTMLInputElement).value;
+    const lastName = (row.children[3].children[0] as HTMLInputElement).value;
+    const email = (row.children[4].children[0] as HTMLInputElement).value;
+    const phone = (row.children[5].children[0] as HTMLInputElement).value;
+    const address = (row.children[6].children[0] as HTMLInputElement).value;
+    const role = (row.children[7].children[0] as HTMLInputElement)
       .value as Role;
 
     const user = new User(
@@ -333,7 +340,8 @@ export class UserCrud implements ICrud<User> {
       email,
       phone,
       role,
-      address
+      address,
+      +user_id
     );
     return JSON.stringify(user);
   }

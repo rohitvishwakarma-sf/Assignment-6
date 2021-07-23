@@ -46,8 +46,9 @@ app.patch("/save", (request, response) => {
                    lastname = '${user.lastname}',
                    phone = '${user.phone}',
                    address = '${user.address}',
-                   role = '${user.role}'
-                  where email = '${user.email}';
+                   role_key = '${user.role_key}',
+                   email = '${user.email}'
+                  where user_id = '${user.user_id}';
                   `,
       (err, res) => {
         if (err) {
@@ -82,7 +83,7 @@ app.put("/", (request, response) => {
   const user = request.body as User;
   db.connect((err, client, done) => {
     client.query(
-      `insert into users values ('${user.firstname}','${user.middlename}','${user.lastname}','${user.email}','${user.phone}','${user.address}','${user.role}');`,
+      `insert into users values ('${user.firstname}','${user.middlename}','${user.lastname}','${user.email}','${user.phone}','${user.address}','${user.role_key}');`,
       (err, result) => {
         if (err) {
           console.log(err);

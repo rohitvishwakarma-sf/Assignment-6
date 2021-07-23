@@ -1,14 +1,15 @@
 export enum Role {
-  superadmin = "superadmin",
+  super_admin = "super_admin",
   admin = "admin",
   subscriber = "subscriber",
 }
 export class User {
+  user_id!: number;
   firstname!: string;
   middlename?: string;
   lastname!: string;
   email!: string;
   phone!: string;
   address!: string;
-  role!: Role;
+  role_key!: Role;
 }

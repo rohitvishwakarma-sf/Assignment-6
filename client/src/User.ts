@@ -1,17 +1,18 @@
 export enum Role {
-  superadmin = "superadmin",
+  super_admin = "super_admin",
   admin = "admin",
   subscriber = "subscriber",
 }
 
 export class User {
+  user_id?: number;
   firstname!: string;
   middlename?: string;
   lastname!: string;
   email!: string;
   phone!: string;
   address!: string;
-  role!: Role;
+  role_key!: Role;
 
   constructor(
     firstName: string,
@@ -20,7 +21,8 @@ export class User {
     email: string,
     phone: string,
     role: Role,
-    address: string
+    address: string,
+    userid?: number
   ) {
     //intializing properties
     {
@@ -29,8 +31,9 @@ export class User {
       this.lastname = lastName;
       this.email = email;
       this.phone = phone;
-      this.role = role;
+      this.role_key = role;
       this.address = address;
+      this.user_id = userid;
     }
   }
 }
