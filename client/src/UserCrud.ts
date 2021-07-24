@@ -228,13 +228,22 @@ export class UserCrud implements ICrud<User> {
   }
   async delete(user: User) {
     const userIndex = this.users.indexOf(user);
-    const response = await fetch(`${myURL}/delete/${user.email}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "aplication/json",
-      },
-    });
+    const customerName =
+      this.tableBody!.children[userIndex].children[8].innerHTML;
+    console.log(customerName);
+
+    const response = await fetch(
+      `${myURL}/delete/${user.email}/${customerName}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "aplication/json",
+        },
+      }
+    );
     if (response.status == 200) {
+      console.log();
+
       this.tableBody!.children[userIndex].remove();
       this.users.splice(userIndex, 1);
     }

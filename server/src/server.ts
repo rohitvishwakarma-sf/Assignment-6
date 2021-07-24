@@ -58,18 +58,30 @@ app.patch("/save", (request, response) => {
   });
 });
 
-app.delete("/delete/:email", (request, response) => {
+app.delete("/delete/:userId/:customerName", async (request, response) => {
   console.log(request.params);
-  db.connect((err, client, done) => {
+  await db.connect((err, client, done) => {
     client.query(
-      `delete from users where email = '${request.params.email}'`,
+      `delete from customers where name = '${request.params.customerName}'`,
       (err, result) => {
         if (err) {
-          console.log(err);
+          console.log(err.message);
           response.status(417).send(err.message);
-        } else {
-          response.status(200).send();
+          return;
         }
+        client.query(
+          `delete from users where user_Id = '${request.params.userId}'`,
+          (err, result) => {
+            if (err) {
+              console.log(err);
+              response.status(417).send(err.message);
+            } else {
+              response
+                .status(200)
+                .send("deleted user with id " + request.params.userId);
+            }
+          }
+        );
       }
     );
   });
