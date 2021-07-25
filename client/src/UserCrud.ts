@@ -35,10 +35,11 @@ export class UserCrud implements ICrud<User> {
 
   async load() {
     await this.fetchUsers();
+
     this.renderTable();
   }
 
-  async renderTable() {
+  renderTable() {
     this.hostEle.innerHTML = "";
     const tableEle = document.createElement("table");
     tableEle.className = "styled-table";
@@ -64,7 +65,7 @@ export class UserCrud implements ICrud<User> {
     //   this.addRow(value);
     // });
     for (const user of this.users) {
-      await this.addRow(user);
+      this.addRow(user);
     }
     // const addbutton = document.createElement("button");
     // addbutton.id = "addbutton";
@@ -72,10 +73,21 @@ export class UserCrud implements ICrud<User> {
     // addbutton.addEventListener("click", this.onCreateData);
     // this.hostEle.appendChild(addbutton);
   }
-  async addRow(user: User) {
-    const customerName = await this.getCustomerName(user.user_id!).then(
-      (data) => data
-    );
+  addRow(user: User) {
+    // const customerName = await this.getCustomerName(user.user_id!).then(
+    //   (data) => data
+    // );
+    let customerName = "";
+    // await fetch(`${myURL}/customername/${user.user_id}`)
+    //   .then(async (respon) => {
+    //     return await respon.json();
+    //   })
+    //   .then((data) => {
+    //     customerName = data;
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
     const row = document.createElement("tr");
     row.innerHTML = `   <td>${user.user_id}</td>
@@ -86,7 +98,7 @@ export class UserCrud implements ICrud<User> {
                         <td>${user.phone}</td>
                         <td>${user.address}</td>
                         <td>${user.role_key}</td>
-                        <td>${customerName}</td>`;
+                        <td>${"customerName"}</td>`;
     const actionTd = document.createElement("td");
     row.appendChild(actionTd);
     const editbutton = this.createNewButton("Edit", CC.editbutton, () => {
@@ -99,8 +111,8 @@ export class UserCrud implements ICrud<User> {
       this.cancel(user);
     });
     cancelbutton.style.display = "none";
-    const savebutton = this.createNewButton("Save", CC.savebutton, () => {
-      this.save(user);
+    const savebutton = this.createNewButton("Save", CC.savebutton, async () => {
+      await this.save(user);
     });
     savebutton.style.display = "none";
     actionTd.appendChild(editbutton);
@@ -124,6 +136,8 @@ export class UserCrud implements ICrud<User> {
   }
   editRow(i: number) {
     console.log(i);
+
+    console.log(this.users);
 
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
     const buttonTd = row.lastChild as HTMLTableDataCellElement;
@@ -250,29 +264,30 @@ export class UserCrud implements ICrud<User> {
   }
   async save(user: User) {
     const index = this.users.indexOf(user);
-    try {
-      const inputedData = this.getEditedUser(index);
 
-      const response = await fetch(myURL + "/save", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: inputedData,
+    const inputedData = this.getEditedUser(index);
+
+    const response = await fetch(myURL + "/save", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: inputedData,
+    })
+      .then((response) => response.ok)
+      .catch((err) => {
+        console.log(err);
       });
-      if (response.status === 200) {
-        const editedUser = JSON.parse(inputedData) as User;
-        user.firstname = editedUser.firstname;
-        user.middlename = editedUser.middlename;
-        user.lastname = editedUser.lastname;
-        user.email = editedUser.email;
-        user.phone = editedUser.phone;
-        user.address = editedUser.address;
-        user.role_key = editedUser.role_key;
-      }
-    } catch (error) {
-      console.log(error);
-    }
+
+    const editedUser = JSON.parse(inputedData) as User;
+    user.firstname = editedUser.firstname;
+    user.middlename = editedUser.middlename;
+    user.lastname = editedUser.lastname;
+    user.email = editedUser.email;
+    user.phone = editedUser.phone;
+    user.address = editedUser.address;
+    user.role_key = editedUser.role_key;
+
     const row = this.tableBody!.children[index] as HTMLTableRowElement;
 
     const buttonTd = row.lastChild as HTMLTableDataCellElement;

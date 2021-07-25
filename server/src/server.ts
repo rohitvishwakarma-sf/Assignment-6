@@ -21,10 +21,11 @@ app.get("/", async (request, response) => {
     client.query(`select * from users`, (err, result) => {
       if (err) {
         console.log(err.stack);
+        response.status(417).send(err.message);
       } else {
         // console.log(JSON.stringify(result.rows));
         response.setHeader("Content-Type", "application/json");
-        response.send(JSON.stringify(result.rows));
+        response.status(200).json(result.rows);
         // res.send(result.rows);
       }
     });
@@ -51,7 +52,7 @@ app.patch("/save", (request, response) => {
           console.log(err);
           response.status(417).send(err.message);
         } else {
-          response.status(200).send();
+          response.status(200).end();
         }
       }
     );
@@ -104,8 +105,6 @@ app.put("/", (request, response) => {
   });
 });
 app.get("/customername/:user_Id", (request, response) => {
-  console.log("customer");
-
   db.connect((err, client, done) => {
     client.query(
       `select name from customers where user_id = '${request.params.user_Id}';`,
@@ -114,8 +113,7 @@ app.get("/customername/:user_Id", (request, response) => {
           console.log(err.message);
           response.status(404).send(err.message);
         } else {
-          response.setHeader("Content-Type", "application/json");
-          response.status(200).send(JSON.stringify(result.rows[0]));
+          response.status(200).json(result.rows[0]);
         }
       }
     );
