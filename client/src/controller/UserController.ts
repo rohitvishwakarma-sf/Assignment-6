@@ -10,6 +10,7 @@ export class UserController {
     this.users = [];
     this.hostEle = document.getElementById(hostId)! as HTMLDivElement;
     this.userServicesCrud = new UserServicesCrud();
+    this.userServicesCrud = new UserServicesCrud();
   }
 
   async load() {
