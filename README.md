@@ -21,13 +21,13 @@ Setup a postgres DB for the previous application. Replace JSON with the new DB c
 
 inside folder server run
 
-> npm install
-> npm run dev
+- `npm install`
+- `npm run dev`
 
 inside folder client run
 
-> npm install
-> npm start
+- `npm install`
+- `npm start`
 
 run client on http://localhost:8080/ as it is used in CORS
 
