@@ -6,13 +6,14 @@ export enum Role {
 
 export class User {
   user_id?: number;
-  firstname!: string;
+  firstname: string;
   middlename?: string;
-  lastname!: string;
-  email!: string;
-  phone!: string;
-  address!: string;
-  role_key!: Role;
+  lastname: string;
+  email: string;
+  phone: string;
+  address: string;
+  role_key: Role;
+  row?: HTMLTableRowElement;
 
   constructor(
     firstName: string,
@@ -22,7 +23,7 @@ export class User {
     phone: string,
     role: Role,
     address: string,
-    userid?: number
+    user_id: number
   ) {
     //intializing properties
     {
@@ -33,7 +34,7 @@ export class User {
       this.phone = phone;
       this.role_key = role;
       this.address = address;
-      this.user_id = userid;
+      this.user_id = user_id;
     }
   }
 }
