@@ -15,10 +15,12 @@ Setup a back end server for the previous application. This needs to be a separat
 
 inside folder server run
 
-> npm run dev
+- `npm install`
+- ` npm run dev`
 
 inside folder client run
 
-> npm start
+- `npm install`
+- `npm start`
 
 run client on http://localhost:8080/ as it is used in CORS policy in server

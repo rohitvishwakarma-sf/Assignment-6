@@ -10,7 +10,6 @@ export class UserController {
     this.users = [];
     this.hostEle = document.getElementById(hostId)! as HTMLDivElement;
     this.userServicesCrud = new UserServicesCrud();
-    this.userServicesCrud = new UserServicesCrud();
   }
 
   async load() {
@@ -121,9 +120,7 @@ export class UserController {
     row.children[5].innerHTML = `<input value=${user.address}>`;
     row.children[6].firstChild!.replaceWith(select);
   }
-  create(user: User) {
-    this.users.push(user);
-  }
+
   edit(i: number) {
     const user = this.users[i];
     this.editRow(this.users.indexOf(user));
