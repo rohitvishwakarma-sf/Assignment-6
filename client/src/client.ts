@@ -1,5 +1,5 @@
-import { UserCrud } from "./UserCrud";
 import { autoBind } from "./decorators/decorator";
+import { UserController } from "./controller/UserController";
 
 // // export const myURL: string = "http://192.168.29.216:5000";
 export const myURL: string = "http://localhost:5000";
@@ -15,7 +15,7 @@ function dateTimeDC(target: any, propertyKey: string) {
 class HomePage {
   loadButton: HTMLButtonElement;
   refreshButton: HTMLButtonElement;
-  userCrud: UserCrud;
+  userController: UserController;
   @dateTimeDC
   date: string = "";
 
@@ -26,12 +26,11 @@ class HomePage {
     this.refreshButton = document.getElementById(
       "refreshbutton"
     )! as HTMLButtonElement;
-    this.userCrud = new UserCrud("tablecontainer");
+    this.userController = new UserController("tablecontainer");
 
     this.loadButton.addEventListener("click", this.loadData);
     this.refreshButton.addEventListener("click", this.refreshData);
     this.refreshButton.style.display = "none";
-    // this.loadData();
   }
 
   updateDate() {
@@ -41,14 +40,14 @@ class HomePage {
 
   @autoBind
   loadData(): void {
-    this.userCrud.load();
+    this.userController.load();
     this.refreshButton.style.display = "";
     this.loadButton.style.display = "none";
     this.updateDate();
   }
   @autoBind
   refreshData(): void {
-    this.userCrud!.refresh();
+    this.userController!.refresh();
     this.updateDate();
   }
 }
