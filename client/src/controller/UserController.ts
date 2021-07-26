@@ -1,17 +1,19 @@
 import { Role, User } from "../model/User";
-import { userServicesCrud } from "../services/UserServicesCrud";
+import { UserServicesCrud } from "../services/UserServicesCrud";
 import { ClassConstants as CC } from "../model/classConstants";
 export class UserController {
   users: User[] = [];
   hostEle: HTMLDivElement;
   tableBody?: HTMLDivElement;
+  userServicesCrud: UserServicesCrud;
   constructor(hostId: string) {
     this.users = [];
     this.hostEle = document.getElementById(hostId)! as HTMLDivElement;
+    this.userServicesCrud = new UserServicesCrud();
   }
 
   async load() {
-    this.users = await userServicesCrud.read();
+    this.users = await this.userServicesCrud.read();
     this.renderTable();
   }
   renderTable() {
@@ -127,17 +129,18 @@ export class UserController {
   }
   async delete(i: number) {
     const user = this.users[i];
-    await userServicesCrud.delete(user);
+    await this.userServicesCrud.delete(user);
 
     this.tableBody!.children[i].remove();
     this.users.splice(i, 1);
+    this.renderTable();
   }
 
   async save(i: number) {
     const currentUser = this.users[i];
     const inputedJsonUser = this.getEditedUser(i);
     const inputedUser = JSON.parse(inputedJsonUser) as User;
-    await userServicesCrud.save(inputedUser);
+    await this.userServicesCrud.save(inputedUser);
 
     currentUser.firstName = inputedUser.firstName;
     currentUser.middleName = inputedUser.middleName;

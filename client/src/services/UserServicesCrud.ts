@@ -58,5 +58,3 @@ export class UserServicesCrud implements ICrud<User> {
     }
   }
 }
-
-export const userServicesCrud = new UserServicesCrud();
