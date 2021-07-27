@@ -27,12 +27,15 @@ Add a customers table and roles table in DB. Customer table columns - name, webs
 
 inside folder server run
 
-> npm run dev
+- npm install
 
-inside folder client run
+- npm run dev
 
-> npm start
+  inside folder client run
 
-run client on http://localhost:8080/ as it is used in CORS policy in server
+- npm install
+- npm start
+
+  run client on http://localhost:8080/ as it is used in CORS policy in server
 
 - Create db entries and run db at port http://localhost:5432
