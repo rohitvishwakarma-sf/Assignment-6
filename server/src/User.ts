@@ -4,7 +4,7 @@ export enum Role {
   subscriber = "subscriber",
 }
 export class User {
-  user_id!: number;
+  id!: number;
   firstname!: string;
   middlename?: string;
   lastname!: string;
@@ -12,4 +12,6 @@ export class User {
   phone!: string;
   address!: string;
   role_key!: Role;
+  createdon!: string;
+  modifiedon!: string;
 }

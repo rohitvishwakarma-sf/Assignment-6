@@ -12,10 +12,8 @@ class Queries {
           console.log(err.stack);
           response.status(417).send(err.message);
         } else {
-          // console.log(JSON.stringify(result.rows));
           response.setHeader("Content-Type", "application/json");
           response.status(200).json(result.rows);
-          // res.send(result.rows);
         }
       });
     });
@@ -34,7 +32,7 @@ class Queries {
                    address = '${user.address}',
                    role_key = '${user.role_key}',
                    email = '${user.email}'
-                  where user_id = '${user.user_id}';
+                  where id = '${user.id}';
                   `,
         (err, res) => {
           done();
@@ -42,7 +40,19 @@ class Queries {
             console.log(err);
             response.status(417).send(err.message);
           } else {
-            response.status(200).end();
+            db.connect((err, client, done) => {
+              client.query(
+                `select * from users where id = '${user.id}'`,
+                (er, result) => {
+                  if (er) {
+                    console.log(err);
+                    response.status(417).send(err.message);
+                  } else {
+                    response.status(200).json(result.rows[0]);
+                  }
+                }
+              );
+            });
           }
         }
       );
@@ -62,7 +72,7 @@ class Queries {
           }
           db.connect((err, client, done) => {
             client.query(
-              `delete from users where user_id = '${request.params.userId}'`,
+              `delete from users where id = '${request.params.userId}'`,
               (err, result) => {
                 done();
                 if (err) {

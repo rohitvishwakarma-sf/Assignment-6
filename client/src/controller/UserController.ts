@@ -1,6 +1,6 @@
 import { Role, User } from "../model/User";
 import { UserServicesCrud } from "../services/UserServicesCrud";
-import { ClassConstants as CC } from "../model/classConstants";
+import { ClassConstants as CC, fulldate } from "../model/utility";
 export class UserController {
   users: User[] = [];
   hostEle: HTMLDivElement;
@@ -41,6 +41,8 @@ export class UserController {
                             <th>Address</th>
                             <th>Role</th>
                             <th>Customer Name</th>
+                            <th>Created on</th>
+                            <th>Modified on</th>
                             <th>Actions</th>`;
     this.hostEle.appendChild(tableEle);
     this.tableBody = document.createElement("tbody");
@@ -52,7 +54,7 @@ export class UserController {
 
   addRow(user: User, index: number) {
     const row = document.createElement("tr");
-    row.innerHTML = ` <td>${user.user_id}</td>
+    row.innerHTML = ` <td>${user.id}</td>
                         <td>${user.firstname}</td>
                         <td>${user.middlename} </td>
                         <td>${user.lastname}</td>
@@ -60,7 +62,12 @@ export class UserController {
                         <td>${user.phone}</td>
                         <td>${user.address}</td>
                         <td>${user.role_key}</td>
-                        <td>${this.customers.get(user.user_id!)}</td>`;
+                        <td>${this.customers.get(user.id!)}</td>
+                        <td>${fulldate(user.createdon)}</td>
+                        <td>${fulldate(user.modifiedon)}</td>
+                        `;
+    const createdon = new Date(user.createdon);
+
     const actionTd = document.createElement("td");
     row.appendChild(actionTd);
     const editbutton = this.createNewButton("Edit", CC.editbutton);
@@ -89,6 +96,7 @@ export class UserController {
 
     this.tableBody!.appendChild(row);
   }
+
   createNewButton(text: string, className: CC): HTMLButtonElement {
     const button = document.createElement("button");
     button.className = className;
@@ -114,7 +122,7 @@ export class UserController {
       buttonTd.querySelector(`.${CC.cancelbutton}`) as HTMLButtonElement
     ).style.display = "";
     const user = this.users[i];
-    row.children[0].innerHTML = `<input value=${user.user_id} disabled>`;
+    row.children[0].innerHTML = `<input value=${user.id} disabled>`;
     row.children[1].innerHTML = `<input value=${user.firstname}>`;
     row.children[2].innerHTML = `<input value=${user.middlename}>`;
     row.children[3].innerHTML = `<input value=${user.lastname}>`;
@@ -151,15 +159,17 @@ export class UserController {
     const currentUser = this.users[i];
     const inputedJsonUser = this.getEditedUser(i);
     const inputedUser = JSON.parse(inputedJsonUser) as User;
-    await this.userServicesCrud.save(inputedUser);
+    const updatedUser = (await this.userServicesCrud.save(inputedUser)) as User;
 
-    currentUser.firstname = inputedUser.firstname;
-    currentUser.middlename = inputedUser.middlename;
-    currentUser.lastname = inputedUser.lastname;
-    currentUser.email = inputedUser.email;
-    currentUser.phone = inputedUser.phone;
-    currentUser.address = inputedUser.address;
-    currentUser.role_key = inputedUser.role_key;
+    currentUser.firstname = updatedUser.firstname;
+    currentUser.middlename = updatedUser.middlename;
+    currentUser.lastname = updatedUser.lastname;
+    currentUser.email = updatedUser.email;
+    currentUser.phone = updatedUser.phone;
+    currentUser.address = updatedUser.address;
+    currentUser.role_key = updatedUser.role_key;
+    currentUser.modifiedon = updatedUser.modifiedon;
+    currentUser.createdon = updatedUser.createdon;
 
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
 
@@ -177,7 +187,7 @@ export class UserController {
     (
       buttonTd.querySelector(`.${CC.deletebutton}`) as HTMLButtonElement
     ).style.display = "";
-    row.children[0].innerHTML = `${currentUser.user_id}`;
+    row.children[0].innerHTML = `${currentUser.id}`;
     row.children[1].innerHTML = `${currentUser.firstname}`;
     row.children[2].innerHTML = `${currentUser.middlename}`;
     row.children[3].innerHTML = `${currentUser.lastname}`;
@@ -185,6 +195,8 @@ export class UserController {
     row.children[5].innerHTML = `${currentUser.phone}`;
     row.children[6].innerHTML = `${currentUser.address}`;
     row.children[7].innerHTML = `${currentUser.role_key}`;
+    row.children[9].innerHTML = `${fulldate(currentUser.createdon)}`;
+    row.children[10].innerHTML = `${fulldate(currentUser.modifiedon)}`;
   }
   cancel(i: number) {
     const user = this.users[i];
@@ -204,7 +216,7 @@ export class UserController {
     (
       actionTd.querySelector(`.${CC.deletebutton}`) as HTMLButtonElement
     ).style.display = "";
-    row.children[0].innerHTML = `${user.user_id}`;
+    row.children[0].innerHTML = `${user.id}`;
     row.children[1].innerHTML = `${user.firstname}`;
     row.children[2].innerHTML = `${user.middlename}`;
     row.children[3].innerHTML = `${user.lastname}`;
@@ -221,7 +233,7 @@ export class UserController {
   }
   getEditedUser(i: number): string {
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
-    const user_Id = (row.children[0].children[0] as HTMLInputElement).value;
+    const id = (row.children[0].children[0] as HTMLInputElement).value;
     const firstName = (row.children[1].children[0] as HTMLInputElement).value;
     const middleName = (row.children[2].children[0] as HTMLInputElement).value;
     const lastName = (row.children[3].children[0] as HTMLInputElement).value;
@@ -230,6 +242,8 @@ export class UserController {
     const address = (row.children[6].children[0] as HTMLInputElement).value;
     const role = (row.children[7].children[0] as HTMLInputElement)
       .value as Role;
+    const createdon = (row.children[9] as HTMLTableDataCellElement).innerHTML;
+    const modifiedon = (row.children[10] as HTMLTableDataCellElement).innerHTML;
 
     const user = new User(
       firstName,
@@ -239,7 +253,9 @@ export class UserController {
       phone,
       role,
       address,
-      +user_Id
+      createdon,
+      modifiedon,
+      +id
     );
     return JSON.stringify(user);
   }
