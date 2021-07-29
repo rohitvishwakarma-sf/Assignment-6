@@ -4,7 +4,7 @@ export enum Role {
   subscriber = "subscriber",
 }
 export class User {
-  user_id!: number;
+  id!: number;
   firstname!: string;
   middlename?: string;
   lastname!: string;

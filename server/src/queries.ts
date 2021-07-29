@@ -34,7 +34,7 @@ class Queries {
                    address = '${user.address}',
                    role_key = '${user.role_key}',
                    email = '${user.email}'
-                  where user_id = '${user.user_id}';
+                  where id = '${user.id}';
                   `,
         (err, res) => {
           done();
@@ -62,7 +62,7 @@ class Queries {
           }
           db.connect((err, client, done) => {
             client.query(
-              `delete from users where user_id = '${request.params.userId}'`,
+              `delete from users where id = '${request.params.userId}'`,
               (err, result) => {
                 done();
                 if (err) {

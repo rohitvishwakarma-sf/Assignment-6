@@ -52,7 +52,7 @@ export class UserController {
 
   addRow(user: User, index: number) {
     const row = document.createElement("tr");
-    row.innerHTML = ` <td>${user.user_id}</td>
+    row.innerHTML = ` <td>${user.id}</td>
                         <td>${user.firstname}</td>
                         <td>${user.middlename} </td>
                         <td>${user.lastname}</td>
@@ -60,7 +60,7 @@ export class UserController {
                         <td>${user.phone}</td>
                         <td>${user.address}</td>
                         <td>${user.role_key}</td>
-                        <td>${this.customers.get(user.user_id!)}</td>`;
+                        <td>${this.customers.get(user.id!)}</td>`;
     const actionTd = document.createElement("td");
     row.appendChild(actionTd);
     const editbutton = this.createNewButton("Edit", CC.editbutton);
@@ -114,7 +114,7 @@ export class UserController {
       buttonTd.querySelector(`.${CC.cancelbutton}`) as HTMLButtonElement
     ).style.display = "";
     const user = this.users[i];
-    row.children[0].innerHTML = `<input value=${user.user_id} disabled>`;
+    row.children[0].innerHTML = `<input value=${user.id} disabled>`;
     row.children[1].innerHTML = `<input value=${user.firstname}>`;
     row.children[2].innerHTML = `<input value=${user.middlename}>`;
     row.children[3].innerHTML = `<input value=${user.lastname}>`;
@@ -177,7 +177,7 @@ export class UserController {
     (
       buttonTd.querySelector(`.${CC.deletebutton}`) as HTMLButtonElement
     ).style.display = "";
-    row.children[0].innerHTML = `${currentUser.user_id}`;
+    row.children[0].innerHTML = `${currentUser.id}`;
     row.children[1].innerHTML = `${currentUser.firstname}`;
     row.children[2].innerHTML = `${currentUser.middlename}`;
     row.children[3].innerHTML = `${currentUser.lastname}`;
@@ -204,7 +204,7 @@ export class UserController {
     (
       actionTd.querySelector(`.${CC.deletebutton}`) as HTMLButtonElement
     ).style.display = "";
-    row.children[0].innerHTML = `${user.user_id}`;
+    row.children[0].innerHTML = `${user.id}`;
     row.children[1].innerHTML = `${user.firstname}`;
     row.children[2].innerHTML = `${user.middlename}`;
     row.children[3].innerHTML = `${user.lastname}`;
