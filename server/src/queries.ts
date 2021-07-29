@@ -13,10 +13,8 @@ class Queries {
         if (err) {
           console.log(err.stack);
         } else {
-          // console.log(JSON.stringify(result.rows));
           response.setHeader("Content-Type", "application/json");
           response.send(JSON.stringify(result.rows));
-          // res.send(result.rows);
         }
       });
     });
@@ -35,7 +33,7 @@ class Queries {
                    address = '${user.address}',
                    role_key = '${user.role_key}',
                    email = '${user.email}'
-                  where user_id = '${user.user_id}';
+                  where id = '${user.user_id}';
                   `,
         (err, res) => {
           if (err) {
@@ -52,7 +50,7 @@ class Queries {
   deleteUser(request: Request, response: Response) {
     db.connect((err, client, done) => {
       client.query(
-        `delete from users where email = '${request.params.email}'`,
+        `delete from users where id = '${request.params.id}'`,
         (err, result) => {
           if (err) {
             console.log(err);

@@ -5,7 +5,7 @@ export enum Role {
 }
 
 export class User {
-  user_id?: number;
+  id?: number;
   firstname: string;
   middlename?: string;
   lastname: string;
@@ -34,7 +34,7 @@ export class User {
       this.phone = phone;
       this.role_key = role;
       this.address = address;
-      this.user_id = user_id;
+      this.id = user_id;
     }
   }
 }
