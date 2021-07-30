@@ -29,6 +29,7 @@ export class UserServicesCrud implements ICrud<User> {
     try {
       const inputedData = JSON.stringify(obj);
       const response = await fetch(myURL + "/" + obj.id!, {
+
         method: "DELETE",
       });
       if (response.status === 200) {

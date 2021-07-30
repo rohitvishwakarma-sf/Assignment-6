@@ -13,6 +13,7 @@ export class User {
   phone: string;
   address: string;
   role_key: Role;
+
   row?: HTMLTableRowElement;
 
   constructor(
@@ -35,6 +36,7 @@ export class User {
       this.role_key = role;
       this.address = address;
       this.id = user_id;
+
     }
   }
 }

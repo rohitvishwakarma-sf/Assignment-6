@@ -26,6 +26,7 @@ export class UserController {
     thead.appendChild(headtr);
     headtr.innerHTML = `<th>ID</th>
                             <th>First Name</th>
+
                             <th>Middle Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
@@ -51,6 +52,7 @@ export class UserController {
                         <td>${user.phone}</td>
                         <td>${user.address}</td>
                         <td>${user.role_key}</td>`;
+
     const actionTd = document.createElement("td");
     row.appendChild(actionTd);
     const editbutton = this.createNewButton("Edit", CC.editbutton);
@@ -110,18 +112,21 @@ export class UserController {
     row.children[3].innerHTML = `<input value=${user.lastname}>`;
     row.children[4].innerHTML = `<input value=${user.email}>`;
     row.children[5].innerHTML = `<input value=${user.phone}>`;
+
     const select = document.createElement("select");
     select.className = "selectrole";
     for (const e in Role) {
       const option = document.createElement("option");
       option.value = e;
       option.textContent = e;
+
       if (user.role_key === e) option.selected = true;
       else option.selected = false;
       select.appendChild(option);
     }
     row.children[6].innerHTML = `<input value=${user.address}>`;
     row.children[7].firstChild!.replaceWith(select);
+
   }
 
   edit(i: number) {
@@ -151,6 +156,7 @@ export class UserController {
     currentUser.address = inputedUser.address;
     currentUser.role_key = inputedUser.role_key;
 
+
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
 
     const buttonTd = row.lastChild as HTMLTableDataCellElement;
@@ -175,6 +181,7 @@ export class UserController {
     row.children[5].innerHTML = `${currentUser.phone}`;
     row.children[6].innerHTML = `${currentUser.address}`;
     row.children[7].innerHTML = `${currentUser.role_key}`;
+
   }
   cancel(i: number) {
     const user = this.users[i];
@@ -202,6 +209,7 @@ export class UserController {
     row.children[5].innerHTML = `${user.phone}`;
     row.children[6].innerHTML = `${user.address}`;
     row.children[7].innerHTML = `${user.role_key}`;
+
   }
 
   refresh() {
@@ -211,6 +219,7 @@ export class UserController {
   }
   getEditedUser(i: number): string {
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
+
     const user_Id = (row.children[0].children[0] as HTMLInputElement).value;
     const firstName = (row.children[1].children[0] as HTMLInputElement).value;
     const middleName = (row.children[2].children[0] as HTMLInputElement).value;
@@ -230,6 +239,7 @@ export class UserController {
       role,
       address,
       +user_Id
+
     );
     return JSON.stringify(user);
   }
