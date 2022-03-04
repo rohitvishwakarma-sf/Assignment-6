@@ -20,6 +20,6 @@ app.get("/", queries.getAllUsers);
 app.post("/save", queries.saveUser);
 
 //delete users
-app.delete("/:email", queries.deleteUser);
+app.delete("/:id", queries.deleteUser);
 
 app.listen(5000, () => console.log("server running"));

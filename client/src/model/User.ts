@@ -1,17 +1,19 @@
 export enum Role {
-  superAdmin = "superAdmin",
+  super_admin = "super_admin",
   admin = "admin",
   subscriber = "subscriber",
 }
 
 export class User {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
+  id?: number;
+  firstname: string;
+  middlename?: string;
+  lastname: string;
   email: string;
   phone: string;
   address: string;
-  role: Role;
+  role_key: Role;
+
   row?: HTMLTableRowElement;
 
   constructor(
@@ -21,17 +23,20 @@ export class User {
     email: string,
     phone: string,
     role: Role,
-    address: string
+    address: string,
+    user_id: number
   ) {
     //intializing properties
     {
-      this.firstName = firstName;
-      this.middleName = middleName;
-      this.lastName = lastName;
+      this.firstname = firstName;
+      this.middlename = middleName;
+      this.lastname = lastName;
       this.email = email;
       this.phone = phone;
-      this.role = role;
+      this.role_key = role;
       this.address = address;
+      this.id = user_id;
+
     }
   }
 }

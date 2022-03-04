@@ -24,7 +24,9 @@ export class UserController {
     tableEle.appendChild(thead);
     const headtr = document.createElement("tr");
     thead.appendChild(headtr);
-    headtr.innerHTML = `<th>First Name</th>
+    headtr.innerHTML = `<th>ID</th>
+                            <th>First Name</th>
+
                             <th>Middle Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
@@ -42,13 +44,15 @@ export class UserController {
 
   addRow(user: User, index: number) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${user.firstName}</td>
-                        <td>${user.middleName} </td>
-                        <td>${user.lastName}</td>
+    row.innerHTML = ` <td>${user.id}</td>
+                        <td>${user.firstname}</td>
+                        <td>${user.middlename} </td>
+                        <td>${user.lastname}</td>
                         <td>${user.email}</td>
                         <td>${user.phone}</td>
                         <td>${user.address}</td>
-                        <td>${user.role}</td>`;
+                        <td>${user.role_key}</td>`;
+
     const actionTd = document.createElement("td");
     row.appendChild(actionTd);
     const editbutton = this.createNewButton("Edit", CC.editbutton);
@@ -102,23 +106,27 @@ export class UserController {
       buttonTd.querySelector(`.${CC.cancelbutton}`) as HTMLButtonElement
     ).style.display = "";
     const user = this.users[i];
-    row.children[0].innerHTML = `<input value=${user.firstName}>`;
-    row.children[1].innerHTML = `<input value=${user.middleName}>`;
-    row.children[2].innerHTML = `<input value=${user.lastName}>`;
-    row.children[3].innerHTML = `<input value=${user.email}>`;
-    row.children[4].innerHTML = `<input value=${user.phone}>`;
+    row.children[0].innerHTML = `<input value=${user.id} disabled>`;
+    row.children[1].innerHTML = `<input value=${user.firstname}>`;
+    row.children[2].innerHTML = `<input value=${user.middlename}>`;
+    row.children[3].innerHTML = `<input value=${user.lastname}>`;
+    row.children[4].innerHTML = `<input value=${user.email}>`;
+    row.children[5].innerHTML = `<input value=${user.phone}>`;
+
     const select = document.createElement("select");
     select.className = "selectrole";
     for (const e in Role) {
       const option = document.createElement("option");
       option.value = e;
       option.textContent = e;
-      if (user.role === e) option.selected = true;
+
+      if (user.role_key === e) option.selected = true;
       else option.selected = false;
       select.appendChild(option);
     }
-    row.children[5].innerHTML = `<input value=${user.address}>`;
-    row.children[6].firstChild!.replaceWith(select);
+    row.children[6].innerHTML = `<input value=${user.address}>`;
+    row.children[7].firstChild!.replaceWith(select);
+
   }
 
   edit(i: number) {
@@ -140,13 +148,14 @@ export class UserController {
     const inputedUser = JSON.parse(inputedJsonUser) as User;
     await this.userServicesCrud.save(inputedUser);
 
-    currentUser.firstName = inputedUser.firstName;
-    currentUser.middleName = inputedUser.middleName;
-    currentUser.lastName = inputedUser.lastName;
+    currentUser.firstname = inputedUser.firstname;
+    currentUser.middlename = inputedUser.middlename;
+    currentUser.lastname = inputedUser.lastname;
     currentUser.email = inputedUser.email;
     currentUser.phone = inputedUser.phone;
     currentUser.address = inputedUser.address;
-    currentUser.role = inputedUser.role;
+    currentUser.role_key = inputedUser.role_key;
+
 
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
 
@@ -164,13 +173,15 @@ export class UserController {
     (
       buttonTd.querySelector(`.${CC.deletebutton}`) as HTMLButtonElement
     ).style.display = "";
-    row.children[0].innerHTML = `${currentUser.firstName}`;
-    row.children[1].innerHTML = `${currentUser.middleName}`;
-    row.children[2].innerHTML = `${currentUser.lastName}`;
-    row.children[3].innerHTML = `${currentUser.email}`;
-    row.children[4].innerHTML = `${currentUser.phone}`;
-    row.children[5].innerHTML = `${currentUser.address}`;
-    row.children[6].innerHTML = `${currentUser.role}`;
+    row.children[0].innerHTML = `${currentUser.id}`;
+    row.children[1].innerHTML = `${currentUser.firstname}`;
+    row.children[2].innerHTML = `${currentUser.middlename}`;
+    row.children[3].innerHTML = `${currentUser.lastname}`;
+    row.children[4].innerHTML = `${currentUser.email}`;
+    row.children[5].innerHTML = `${currentUser.phone}`;
+    row.children[6].innerHTML = `${currentUser.address}`;
+    row.children[7].innerHTML = `${currentUser.role_key}`;
+
   }
   cancel(i: number) {
     const user = this.users[i];
@@ -190,14 +201,15 @@ export class UserController {
     (
       actionTd.querySelector(`.${CC.deletebutton}`) as HTMLButtonElement
     ).style.display = "";
+    row.children[0].innerHTML = `${user.id}`;
+    row.children[1].innerHTML = `${user.firstname}`;
+    row.children[2].innerHTML = `${user.middlename}`;
+    row.children[3].innerHTML = `${user.lastname}`;
+    row.children[4].innerHTML = `${user.email}`;
+    row.children[5].innerHTML = `${user.phone}`;
+    row.children[6].innerHTML = `${user.address}`;
+    row.children[7].innerHTML = `${user.role_key}`;
 
-    row.children[0].innerHTML = `${user.firstName}`;
-    row.children[1].innerHTML = `${user.middleName}`;
-    row.children[2].innerHTML = `${user.lastName}`;
-    row.children[3].innerHTML = `${user.email}`;
-    row.children[4].innerHTML = `${user.phone}`;
-    row.children[5].innerHTML = `${user.address}`;
-    row.children[6].innerHTML = `${user.role}`;
   }
 
   refresh() {
@@ -207,13 +219,15 @@ export class UserController {
   }
   getEditedUser(i: number): string {
     const row = this.tableBody!.children[i] as HTMLTableRowElement;
-    const firstName = (row.children[0].children[0] as HTMLInputElement).value;
-    const middleName = (row.children[1].children[0] as HTMLInputElement).value;
-    const lastName = (row.children[2].children[0] as HTMLInputElement).value;
-    const email = (row.children[3].children[0] as HTMLInputElement).value;
-    const phone = (row.children[4].children[0] as HTMLInputElement).value;
-    const address = (row.children[5].children[0] as HTMLInputElement).value;
-    const role = (row.children[6].children[0] as HTMLInputElement)
+
+    const user_Id = (row.children[0].children[0] as HTMLInputElement).value;
+    const firstName = (row.children[1].children[0] as HTMLInputElement).value;
+    const middleName = (row.children[2].children[0] as HTMLInputElement).value;
+    const lastName = (row.children[3].children[0] as HTMLInputElement).value;
+    const email = (row.children[4].children[0] as HTMLInputElement).value;
+    const phone = (row.children[5].children[0] as HTMLInputElement).value;
+    const address = (row.children[6].children[0] as HTMLInputElement).value;
+    const role = (row.children[7].children[0] as HTMLInputElement)
       .value as Role;
 
     const user = new User(
@@ -223,7 +237,9 @@ export class UserController {
       email,
       phone,
       role,
-      address
+      address,
+      +user_Id
+
     );
     return JSON.stringify(user);
   }
